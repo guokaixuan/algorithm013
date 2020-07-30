@@ -1,3 +1,6 @@
+/**
+ * 移动零
+ */
 public class MoveZeroes {
 
     public void moveZeroes(int[] nums) {
