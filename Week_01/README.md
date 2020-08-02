@@ -1,35 +1,101 @@
 # 学习笔记
 
-## 删除排序数组中的重复项
-思考点：
-- 数组长度等于0
-- 数组长度大于0
+## 本周学习总结
 
-结题思路是设置快慢两个指针，慢指针slow=0，快指针quick从1开始循环至数组最后，每次检查快指针数组值
-是否与慢指针对应值不同，如果不满足条件则quick指针后移，满足条件则移动slow指针并将quick的值赋给slow。
+在本周的学习过程中，我掌握了数组、链表、跳表基础数据结构和特性，并且对堆和栈有了一定了解。
+
+对待本周的作业内容，我在leetcode上遵循五部解题法来完成的。先读题并思考解题方法，遇到完全没有思路的看一下官方或者点赞多的题解，然后再记忆并默写两遍。解题过程尽可能尝试不同的解题方法并比较各种方式的差异和时间、空间复杂度，每道题至少做5遍。
+
+我本人总结能力弱一些，我记录了几个我的解题过程，在这里列举两个。
+
+## 删除排序数组中的重复项
+
+给定一个排序数组，你需要在 原地 删除重复出现的元素，使得每个元素只出现一次，返回移除后数组的新长度。
+不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
+
+示例 1:
+
+给定数组 nums = [1,1,2], 
+
+函数应该返回新的长度 2, 并且原数组 nums 的前两个元素被修改为 1, 2。 
+
+你不需要考虑数组中超出新长度后面的元素。
+示例 2:
+
+给定 nums = [0,0,1,1,1,2,2,3,3,4],
+
+函数应该返回新的长度 5, 并且原数组 nums 的前五个元素被修改为 0, 1, 2, 3, 4。
+
+你不需要考虑数组中超出新长度后面的元素。
+
+**解题过程**
+
+本题关键点：
+
+- 有序数组
+- 删除重复出现的元素
+- 不使用额外的数组空间
+- 只能使用O(1)额外空间
+
+整理好这些关键信息，我首先考虑边界情况，如果nums数组长度等于0那么直接返回0。如果nums数组长度不等于0，就要从头至尾遍历数组nums,遍历时我使用快慢指针，快指针遍历数组，慢指针用来记录非重复元素下标。解题代码如下：
+
 ```java
 class Solution {
     public int removeDuplicates(int[] nums) {
         if(nums.length == 0) {
             return 0;
         }
-        int slow = 0;
+        int j = 0;
         for(int i = 1; i < nums.length; i++) {
-            if(nums[slow] != nums[i]) {
-                nums[++slow] = nums[i];
+            if(nums[j] != nums[i]) {
+                nums[++j] = nums[i];
             }            
         }
         return slow + 1;
     }
 }
 ```
-## 旋转数组
-解题方法：
-- 暴力解题：每次取最后一个元素然后剩余元素整体后移
-- 新建数组：新建一个同长数组，将原数组中的元素按要求整理到新数组中
-- 循环跳跃：每次保留前一个元素值，然后向后跳k个位置，将保留值放入该位置并将保留值改为替换前的该位置的值，依次执行直到整个数组执行完毕
+代码中我额外使用了int i,j 两个额外空间，额外空间复杂度O(1)，对数组进行了一遍循环，时间复杂度O(n)。
 
-这里只列举最后一种方式：
+## 旋转数组
+给定一个数组，将数组中的元素向右移动 k 个位置，其中 k 是非负数。
+
+示例 1:
+
+输入: [1,2,3,4,5,6,7] 和 k = 3
+输出: [5,6,7,1,2,3,4]
+解释:
+向右旋转 1 步: [7,1,2,3,4,5,6]
+向右旋转 2 步: [6,7,1,2,3,4,5]
+向右旋转 3 步: [5,6,7,1,2,3,4]
+示例 2:
+
+输入: [-1,-100,3,99] 和 k = 2
+输出: [3,99,-1,-100]
+解释: 
+向右旋转 1 步: [99,-1,-100,3]
+向右旋转 2 步: [3,99,-1,-100]
+
+**说明:**
+尽可能想出更多的解决方案，至少有三种不同的方法可以解决这个问题。
+要求使用空间复杂度为 O(1) 的 原地 算法。
+
+看到这道题目，首先想到的解法是暴力循环，每天取最后一个数组元素，然后循环后移，再把取出的元素放到第一位。暴力解题之后未想到其他解法，我查看了推荐题解，找到一个比较好的解题方法，总结来说就是每次保留前一个元素值，然后向后跳k个位置，将保留值放入该位置并将保留值改为替换前的该位置的值，依次执行直到整个数组执行完毕。
+
+原题解说明：
+
+如果我们直接把每一个数字放到它最后的位置，但这样的后果是遗失原来的元素。因此，我们需要把被替换的数字保存在变量 temptemp 里面。然后，我们将被替换数字（temptemp）放到它正确的位置，并继续这个过程 nn 次， nn 是数组的长度。这是因为我们需要将数组里所有的元素都移动。但是，这种方法可能会有个问题，如果 n\%k==0n%k==0，其中 k=k\%nk=k%n （因为如果 kk 大于 nn ，移动 kk 次实际上相当于移动 k\%nk%n 次）。这种情况下，我们会发现在没有遍历所有数字的情况下回到出发数字。此时，我们应该从下一个数字开始再重复相同的过程。
+
+现在，我们看看上面方法的证明。假设，数组里我们有 nn 个元素并且 kk 是要求移动的次数。更进一步，假设 n\%k=0n%k=0 。第一轮中，所有移动数字的下标 ii 满足 i\%k==0i%k==0 。这是因为我们每跳 kk 步，我们只会到达相距为 kk 个位置下标的数。每一轮，我们都会移动 \frac{n}{k} 
+k
+n
+​	
+  个元素。下一轮中，我们会移动满足 i\%k==1i%k==1 的位置的数。这样的轮次会一直持续到我们再次遇到 i\%k==0i%k==0 的地方为止，此时 i=ki=k 。此时在正确位置上的数字共有 k \times \frac{n}{k}=nk× 
+k
+n
+​	
+ =n 个。因此所有数字都在正确位置上。
+
 ```java
 class Solution {
     public void rotate(int[] nums, int k) {
@@ -47,107 +113,6 @@ class Solution {
                 count++;
             }while(i != currentIndex);
         }
-    }
-}
-```
-
-## 合并两个有序链表
-给定两个有序链表，进行有序整合，使用递归即可：
-```java
-class Solution {
-    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
-        if(null == l1) {
-            return l2;
-        }
-        if(null == l2) {
-            return l1;
-        }
-        if(l1.val < l2.val) {
-            l1.next = mergeTwoLists(l1.next, l2);
-            return l1;
-        }else {
-            l2.next = mergeTwoLists(l1, l2.next);
-            return l2;
-        }
-    }
-}
-```
-
-## 合并两个有序数组
-题目：给你两个有序整数数组 nums1 和 nums2，请你将 nums2 合并到 nums1 中，使 nums1 成为一个有序数组。
-
-从后置开始往nums1中填充m + n个值，分别从后面检查nums1和nums2, 遇到大的值则填充到nums1后面，并前移下标，直到有一方结束后将nums2中未检查的元素移到nums1前面。
-
-```java
-class Solution {
-    public void merge(int[] nums1, int m, int[] nums2, int n) {
-        int len = m + n -1;
-        while(m > 0 && n > 0) {
-            nums1[len--] = nums1[m-1] > nums2[n-1] ? nums1[--m] : nums2[--n];
-        }
-        System.arraycopy(nums2, 0, nums1, 0, n);
-    }
-}
-```
-
-## 两数之和
-借助hash检查
-```java
-class Solution {
-    public int[] twoSum(int[] nums, int target) {
-        Map<Integer, Integer> table = new HashMap<>();
-        for(int i = 0; i < nums.length; i++) {
-            if(table.containsKey(target - nums[i])) {
-                return new int[]{table.get(target - nums[i]), i};
-            }
-            table.put(nums[i], i);
-        }
-        throw new IllegalArgumentException("No two sum solution");
-    }
-}
-```
-
-## 移动零
-采用快慢双指针方法解决
-```java
-public class MoveZeroes {
-
-    public void moveZeroes(int[] nums) {
-        int j = 0;
-        for(int i = 0; i < nums.length; i++) {
-            if(nums[i] != 0) {
-                if(i > j) {
-                    nums[j] = nums[i];
-                    nums[i] = 0;
-                }
-                j++;
-            }
-        }
-    }
-}
-```
-
-## 加一
-数字加一考虑两种情况：
-- 小于9直接加1
-- 等于9需要进位
-
-给定一个数组进行末位加1的话，从数组后向前遍历。如果当前数字等于9将其置为0，进位1加到前一个数组位置；如果当前数字小于9将其加1后直接返回。
-遇到数组元素全部是9的情况，只需new一个元数组长度+1的新数组，将第一个元素置为1即可。
-```java
-public class PlusOne {
-
-    public int[] plusOne(int[] digits) {
-        for (int i = digits.length - 1; i >= 0; i--) {
-            if(digits[i] < 9) {
-                digits[i]++;
-                return digits;
-            }
-            digits[i] = 0;
-        }
-        digits = new int[digits.length + 1];
-        digits[0] = 1;
-        return digits;
     }
 }
 ```
